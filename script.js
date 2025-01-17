@@ -1,4 +1,4 @@
-const jsonUrl = 'https://raw.githubusercontent.com/Yeadee/Toffee/refs/heads/main/toffee_ns_player.json'; // Replace with your JSON URL
+const jsonUrl = 'https://raw.githubusercontent.com/Yeadee/Toffee/refs/heads/main/toffee_ns_player.m3u'; // Replace with your JSON URL
 
 // Fetch and render the JSON playlist
 async function fetchAndRenderChannels() {
