@@ -1,38 +1,14 @@
-const m3uUrl = 'https://raw.githubusercontent.com/Yeadee/Toffee/refs/heads/main/toffee_ns_player.m3u';
+const jsonUrl = 'https://raw.githubusercontent.com/Yeadee/Toffee/refs/heads/main/toffee_ns_player.json'; // Replace with your JSON URL
 
-// Function to fetch and parse JSON or M3U
-async function fetchChannels() {
+// Fetch and render the JSON playlist
+async function fetchAndRenderChannels() {
     try {
-        const response = await fetch(m3uUrl);
-        const m3uText = await response.text();
-        const channels = parseM3U(m3uText);
+        const response = await fetch(jsonUrl);
+        const channels = await response.json();
         renderChannels(channels);
     } catch (error) {
-        console.error('Error fetching M3U:', error);
+        console.error('Error fetching JSON playlist:', error);
     }
-}
-
-// Parse M3U file to extract channels
-function parseM3U(m3uText) {
-    const lines = m3uText.split('\n');
-    const channels = [];
-    let currentChannel = {};
-
-    lines.forEach(line => {
-        if (line.startsWith('#EXTINF:')) {
-            const logoMatch = line.match(/tvg-logo="([^"]+)"/);
-            const nameMatch = line.match(/,(.+)$/);
-            if (logoMatch) currentChannel.logo = logoMatch[1];
-            if (nameMatch) currentChannel.name = nameMatch[1];
-        } else if (line.startsWith('http')) {
-            currentChannel.link = line.trim();
-            currentChannel.cookie = ''; // Add a placeholder for cookies if needed
-            channels.push(currentChannel);
-            currentChannel = {};
-        }
-    });
-
-    return channels;
 }
 
 // Render channels dynamically
@@ -46,7 +22,7 @@ function renderChannels(channels) {
         card.onclick = () => playChannel(channel);
 
         card.innerHTML = `
-            <img src="${channel.logo || 'https://via.placeholder.com/200x150'}" alt="${channel.name}">
+            <img src="${channel.logo}" alt="${channel.name}">
             <h3>${channel.name}</h3>
         `;
 
@@ -60,7 +36,7 @@ function playChannel(channel) {
     const videoPlayer = document.getElementById('video-player');
     const channelList = document.getElementById('channel-list');
 
-    // Hide the channel list and show the player
+    // Hide channel list and show player
     channelList.style.display = 'none';
     playerContainer.style.display = 'block';
 
@@ -77,14 +53,7 @@ function playChannel(channel) {
     }
 }
 
-// Go back to channel list
+// Go back to the channel list
 function goBack() {
     const playerContainer = document.getElementById('player-container');
-    const channelList = document.getElementById('channel-list');
-
-    playerContainer.style.display = 'none';
-    channelList.style.display = 'flex';
-}
-
-// Fetch and render channels on load
-fetchChannels();
+    const channelList = document.getElementById('channel
